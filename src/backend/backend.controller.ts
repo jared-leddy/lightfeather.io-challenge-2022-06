@@ -16,7 +16,7 @@ export class BackendController {
     // route: /supervisors
     @Get('supervisors')
     getSupervisors(@Body() req: Request, res: Response) {
-        return this.backendService.getSupervisors(req);
+        return this.backendService.getSupervisors(req, res);
     }
 
     // route: /submit
