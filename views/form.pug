@@ -2,7 +2,7 @@ extends _layout
 
 block content 
   section.container-sm(style='margin-top: 200px;width:600px;margin-left: auto; margin-right: auto;background-color:lightblue; padding: 150px;')
-    form#registerForm
+    form#ticketForm
       fieldset()
         legend(style='color: black') Register Form
         .mb-3
@@ -17,9 +17,10 @@ block content
           label.form-label(for='email', style='color: black') Email Address
           input#email.form-control(type='text' placeholder='john.doe@domain.com')
         .mb-3
-          label.form-label(for='password', style='color: black') Password
-          input#password.form-control(type='text' placeholder='**********')
+          label.form-label(for='phoneNumber', style='color: black') Phone
+          input#phoneNumber.form-control(type='text' placeholder='000-000-0000')
         .mb-3
-          label.form-label(for='passwordConfirm', style='color: black') Password Confirm
-          input#passwordConfirm.form-control(type='text' placeholder='**********')
-        button.btn.btn-primary(type='submit') Register
+          label.form-label(for='SupervisorSelect', style='color: black') Supervisor
+          select#SupervisorSelect.form-control
+            option(value='Select Supervisor...')
+        button.btn.btn-primary(type='submit') Submit Ticket
