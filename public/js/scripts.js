@@ -117,61 +117,39 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"account.js":[function(require,module,exports) {
+})({"backend.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.register = exports.logout = exports.login = void 0;
+exports.register = exports.getSupervisors = void 0;
 
-var login = function login(email, password) {
-  console.log('Begin capture email and password.');
-  $.ajax({
-    method: 'post',
-    url: '/api/v1/account/login/',
-    data: {
-      email: email,
-      password: password
-    }
-  }).done(function () {
-    console.log('POST: /api/v1/account/login/ | status: success');
-    setTimeout(function () {
-      window.location.assign('/');
-    }, 3000);
+var getSupervisors = function getSupervisors() {
+  console.log('getSupervisors: Begin');
+  return $.ajax({
+    method: 'get',
+    url: '/api/supervisors/'
+  }).done(function (response) {
+    console.log('GET: /api/supervisors/ | status: success');
+    console.log(response.data);
+    return response.data.forEach(function (item) {
+      var jurisdiction = item.jurisdiction;
+      var firstName = item.firstName;
+      var lastName = item.lastName;
+      $(supervisorList).append("<p class='lightfeather-list-row'>".concat(jurisdiction, " - ").concat(lastName, ", ").concat(firstName, "</p>"));
+    });
   }).fail(function (error) {
-    console.log('POST: /api/v1/account/login/ | status: error');
+    console.log('GET: /api/supervisors/ | status: error');
     console.log("Error Received: ".concat(error));
     console.dir(error);
     console.table(error);
   }).always(function () {
-    console.log('POST: /api/v1/account/login/ | status: completed');
+    console.log('GET: /api/supervisors/ | status: completed');
   });
 };
 
-exports.login = login;
-
-var logout = function logout() {
-  console.log('Begin capture form data.');
-  $.ajax({
-    method: 'post',
-    url: '/api/v1/account/logout/'
-  }).done(function () {
-    console.log('POST: /api/v1/account/logout/ | status: success');
-    setTimeout(function () {
-      window.location.assign('/login');
-    }, 3000);
-  }).fail(function (error) {
-    console.log('POST: /api/v1/account/logout/ | status: error');
-    console.log("Error Received: ".concat(error));
-    console.dir(error);
-    console.table(error);
-  }).always(function () {
-    console.log('POST: /api/v1/account/logout/ | status: completed');
-  });
-};
-
-exports.logout = logout;
+exports.getSupervisors = getSupervisors;
 
 var register = function register(firstName, lastName, email, password, passwordConfirm) {
   console.log('Begin capture form data.');
@@ -204,22 +182,16 @@ exports.register = register;
 },{}],"index.js":[function(require,module,exports) {
 "use strict";
 
-var _account = require("./account");
+var _backend = require("./backend");
 
 $(document).ready(function () {
   // DOM Elements
-  var loginForm = $('#loginForm');
-  var logoutButton = $('#logoutButton');
+  var supervisorList = $('#supervisorList');
+  var showSupervisorList = $('#showSupervisorList');
   var registerForm = $('#registerForm');
-  loginForm.on('submit', function (event) {
+  showSupervisorList.on('click', function (event) {
     event.preventDefault();
-    var email = $('#email').val();
-    var password = $('#password').val();
-    (0, _account.login)(email, password);
-  });
-  logoutButton.on('click', function (event) {
-    event.preventDefault();
-    (0, _account.logout)();
+    (0, _backend.getSupervisors)();
   });
   registerForm.on('submit', function (event) {
     event.preventDefault();
@@ -228,10 +200,10 @@ $(document).ready(function () {
     var email = $('#email').val();
     var password = $('#password').val();
     var passwordConfirm = $('#passwordConfirm').val();
-    (0, _account.register)(firstName, lastName, email, password, passwordConfirm);
+    register(firstName, lastName, email, password, passwordConfirm);
   });
 });
-},{"./account":"account.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./backend":"backend.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -259,7 +231,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53265" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56709" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
