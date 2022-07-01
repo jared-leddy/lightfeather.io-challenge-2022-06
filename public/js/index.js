@@ -1,21 +1,14 @@
-import { login, logout, register } from './account';
+import { getSupervisors } from './backend';
 
 $(document).ready(function () {
     // DOM Elements
-    const loginForm = $('#loginForm');
-    const logoutButton = $('#logoutButton');
+    const supervisorList = $('#supervisorList');
+    const showSupervisorList = $('#showSupervisorList');
     const registerForm = $('#registerForm');
 
-    loginForm.on('submit', (event) => {
+    showSupervisorList.on('click', (event) => {
         event.preventDefault();
-        const email = $('#email').val();
-        const password = $('#password').val();
-        login(email, password);
-    });
-
-    logoutButton.on('click', (event) => {
-        event.preventDefault();
-        logout();
+        getSupervisors();
     });
 
     registerForm.on('submit', (event) => {
