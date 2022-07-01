@@ -2,12 +2,12 @@
 import { Module } from '@nestjs/common';
 
 // Custom Modules
-import { AccountModule } from './account/account.module';
+import { BackendModule } from './backend/backend.module';
 import { ViewModule } from './views/view.module';
 
 // create module from decorator
 @Module({
-    imports: [AccountModule, ViewModule],
+    imports: [BackendModule, ViewModule],
     controllers: [],
     providers: []
 })

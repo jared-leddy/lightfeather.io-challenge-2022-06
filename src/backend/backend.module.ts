@@ -13,4 +13,4 @@ import { BackendService } from './backend.service';
     controllers: [BackendController],
     providers: [BackendService]
 })
-export class AccountModule {}
+export class BackendModule {}
