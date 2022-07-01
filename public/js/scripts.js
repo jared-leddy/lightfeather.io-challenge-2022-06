@@ -123,7 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.register = exports.getSupervisors = void 0;
+exports.postSubmitTicket = exports.getSupervisors = void 0;
 
 var getSupervisors = function getSupervisors() {
   console.log('getSupervisors: Begin');
@@ -151,34 +151,33 @@ var getSupervisors = function getSupervisors() {
 
 exports.getSupervisors = getSupervisors;
 
-var register = function register(firstName, lastName, email, password, passwordConfirm) {
-  console.log('Begin capture form data.');
+var postSubmitTicket = function postSubmitTicket(firstName, lastName, email, phoneNumber, Supervisor) {
+  console.log('postSubmitTicket: Begin');
   $.ajax({
     method: 'post',
-    url: '/api/v1/account/register/',
+    url: '/api/submit/',
     data: {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      password: password,
-      passwordConfirm: passwordConfirm
+      phoneNumber: phoneNumber,
+      Supervisor: Supervisor
     }
-  }).done(function () {
-    console.log('POST: /api/v1/account/register/ | status: success');
-    setTimeout(function () {
-      window.location.assign('/');
-    }, 3000);
+  }).done(function (response) {
+    console.log('POST: /api/submit/ | status: success');
+    console.log('response data', response.data);
+    return response.data;
   }).fail(function (error) {
-    console.log('POST: /api/v1/account/register/ | status: error');
+    console.log('POST: /api/submit/ | status: error');
     console.log("Error Received: ".concat(error));
     console.dir(error);
     console.table(error);
   }).always(function () {
-    console.log('POST: /api/v1/account/register/ | status: completed');
+    console.log('POST: /api/submit/ | status: completed');
   });
 };
 
-exports.register = register;
+exports.postSubmitTicket = postSubmitTicket;
 },{}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -188,19 +187,26 @@ $(document).ready(function () {
   // DOM Elements
   var supervisorList = $('#supervisorList');
   var showSupervisorList = $('#showSupervisorList');
-  var registerForm = $('#registerForm');
+  var ticketForm = $('#ticketForm');
+  var SupervisorSelect = $('#SupervisorSelect');
   showSupervisorList.on('click', function (event) {
     event.preventDefault();
     (0, _backend.getSupervisors)();
   });
-  registerForm.on('submit', function (event) {
+  var data = (0, _backend.getSupervisors)();
+  var updatedValue = data.map(function (item) {
+    var value = "<option value='".concat(item, "'>").concat(item, "</option>");
+    return value;
+  });
+  $(SupervisorSelect).append(updatedValue);
+  ticketForm.on('submit', function (event) {
     event.preventDefault();
     var firstName = $('#firstName').val();
     var lastName = $('#lastName').val();
     var email = $('#email').val();
-    var password = $('#password').val();
-    var passwordConfirm = $('#passwordConfirm').val();
-    register(firstName, lastName, email, password, passwordConfirm);
+    var phoneNumber = $('#phoneNumber').val();
+    var Supervisor = $('#SupervisorSelect').val();
+    (0, _backend.postSubmitTicket)(firstName, lastName, email, phoneNumber, Supervisor);
   });
 });
 },{"./backend":"backend.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
