@@ -28,32 +28,31 @@ export const getSupervisors = () => {
         });
 };
 
-export const register = (firstName, lastName, email, password, passwordConfirm) => {
-    console.log('Begin capture form data.');
+export const postSubmitTicket = (firstName, lastName, email, phoneNumber, Supervisor) => {
+    console.log('postSubmitTicket: Begin');
     $.ajax({
         method: 'post',
-        url: '/api/v1/account/register/',
+        url: '/api/submit/',
         data: {
             firstName,
             lastName,
             email,
-            password,
-            passwordConfirm
+            phoneNumber,
+            Supervisor
         }
     })
-        .done(function () {
-            console.log('POST: /api/v1/account/register/ | status: success');
-            setTimeout(() => {
-                window.location.assign('/');
-            }, 3000);
+        .done(function (response) {
+            console.log('POST: /api/submit/ | status: success');
+            console.log('response data', response.data);
+            return response.data;
         })
         .fail(function (error) {
-            console.log('POST: /api/v1/account/register/ | status: error');
+            console.log('POST: /api/submit/ | status: error');
             console.log(`Error Received: ${error}`);
             console.dir(error);
             console.table(error);
         })
         .always(function () {
-            console.log('POST: /api/v1/account/register/ | status: completed');
+            console.log('POST: /api/submit/ | status: completed');
         });
 };
