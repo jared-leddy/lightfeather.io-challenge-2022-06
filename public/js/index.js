@@ -1,23 +1,31 @@
-import { getSupervisors } from './backend';
+import { getSupervisors, postSubmitTicket } from './backend';
 
 $(document).ready(function () {
     // DOM Elements
     const supervisorList = $('#supervisorList');
     const showSupervisorList = $('#showSupervisorList');
-    const registerForm = $('#registerForm');
+    const ticketForm = $('#ticketForm');
+    const SupervisorSelect = $('#SupervisorSelect');
 
     showSupervisorList.on('click', (event) => {
         event.preventDefault();
         getSupervisors();
     });
 
-    registerForm.on('submit', (event) => {
+    const data = getSupervisors();
+    const updatedValue = data.map((item) => {
+        const value = `<option value='${item}'>${item}</option>`;
+        return value;
+    });
+    $(SupervisorSelect).append(updatedValue);
+
+    ticketForm.on('submit', (event) => {
         event.preventDefault();
         const firstName = $('#firstName').val();
         const lastName = $('#lastName').val();
         const email = $('#email').val();
-        const password = $('#password').val();
-        const passwordConfirm = $('#passwordConfirm').val();
-        register(firstName, lastName, email, password, passwordConfirm);
+        const phoneNumber = $('#phoneNumber').val();
+        const Supervisor = $('#SupervisorSelect').val();
+        postSubmitTicket(firstName, lastName, email, phoneNumber, Supervisor);
     });
 });
